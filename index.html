@@ -18,7 +18,7 @@
     }
 
     .heart {
-        font-size: 500px; /* Corazón gigante */
+        font-size: 500px;
         color: red;
         animation: beat 1s infinite;
     }
@@ -63,7 +63,7 @@
     .buttons {
         width: 100%;
         display: flex;
-        justify-content: flex-start; /* Yes a la izquierda */
+        justify-content: flex-start;
         margin-top: 20px;
         position: relative;
         height: 80px;
@@ -79,11 +79,19 @@
 <div class="buttons">
     <button id="yesBtn">Yes</button>
 </div>
-<button id="noBtn">No</button> <!-- No fuera del contenedor -->
+<button id="noBtn">No</button>
 
 <script>
 const noBtn = document.getElementById("noBtn");
 const padding = 10;
+
+// Inicializar posición del botón No
+function initNoButton() {
+    noBtn.style.left = (window.innerWidth - noBtn.offsetWidth - padding) + "px";
+    noBtn.style.top = (window.innerHeight / 2) + "px";
+}
+window.onload = initNoButton;
+window.onresize = initNoButton;
 
 // Función para mover el botón No dentro de la pantalla
 function moveNoButton() {
@@ -95,7 +103,7 @@ function moveNoButton() {
     noBtn.style.top = y + "px";
 }
 
-// Se mueve al acercarse el cursor
+// Movimiento al acercar el cursor
 document.addEventListener("mousemove", function(e) {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
@@ -105,20 +113,13 @@ document.addEventListener("mousemove", function(e) {
     if (distance < 180) moveNoButton();
 });
 
-// Si alguien pulsa No, se mueve inmediatamente
+// Movimiento si alguien pulsa No
 noBtn.onclick = moveNoButton;
-
-// Movimiento automático rápido cada 0.5 segundos
-setInterval(moveNoButton, 500);
 
 // Yes button
 document.getElementById("yesBtn").onclick = function() {
     document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
 };
-
-// Inicializar posición al cargar y al cambiar tamaño
-window.onload = moveNoButton;
-window.onresize = moveNoButton;
 </script>
 
 </body>
