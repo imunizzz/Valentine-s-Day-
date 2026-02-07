@@ -34,7 +34,15 @@
         text-align: center;
     }
 
-    #yesBtn, #noBtn {
+    .buttons {
+        display: flex;
+        justify-content: center; /* centrar horizontalmente */
+        gap: 50px; /* espacio entre Yes y No */
+        margin-top: 20px;
+        position: relative;
+    }
+
+    button {
         padding: 20px 50px;
         font-size: 26px;
         border: none;
@@ -47,26 +55,16 @@
     #yesBtn {
         background: red;
         color: white;
-        margin-right: 50px;
     }
 
     #noBtn {
         background: gray;
         color: white;
-        position: absolute;
+        position: relative; /* empieza relativo dentro del contenedor */
     }
 
-    #yesBtn:hover, #noBtn:hover {
+    button:hover {
         transform: scale(1.1);
-    }
-
-    .buttons {
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        margin-top: 20px;
-        position: relative;
-        height: 80px;
     }
 </style>
 </head>
@@ -78,20 +76,12 @@
 
 <div class="buttons">
     <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
 </div>
-<button id="noBtn">No</button>
 
 <script>
 const noBtn = document.getElementById("noBtn");
 const padding = 10;
-
-// Inicializar posición del botón No
-function initNoButton() {
-    noBtn.style.left = (window.innerWidth - noBtn.offsetWidth - padding) + "px";
-    noBtn.style.top = (window.innerHeight / 2) + "px";
-}
-window.onload = initNoButton;
-window.onresize = initNoButton;
 
 // Función para mover el botón No dentro de la pantalla
 function moveNoButton() {
@@ -99,6 +89,7 @@ function moveNoButton() {
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
+    noBtn.style.position = "absolute"; // pasa a absolute para moverse
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 }
@@ -110,15 +101,28 @@ document.addEventListener("mousemove", function(e) {
         e.clientX - (rect.left + rect.width / 2),
         e.clientY - (rect.top + rect.height / 2)
     );
-    if (distance < 180) moveNoButton();
+    if (distance < 150) moveNoButton(); // se mueve solo al acercarse
 });
 
-// Movimiento si alguien pulsa No
+// Si alguien pulsa No, se mueve inmediatamente
 noBtn.onclick = moveNoButton;
 
 // Yes button
 document.getElementById("yesBtn").onclick = function() {
     document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
+};
+
+// Inicializar posición al cargar y ajustar si se cambia tamaño
+window.onload = function() {
+    // deja el No inicialmente alineado con Yes
+    const buttonsDiv = document.querySelector('.buttons');
+    const rect = buttonsDiv.getBoundingClientRect();
+    noBtn.style.position = "relative";
+    noBtn.style.left = "0px";
+    noBtn.style.top = "0px";
+};
+window.onresize = function() {
+    noBtn.style.position = "relative";
 };
 </script>
 
