@@ -39,6 +39,8 @@
         justify-content: center;
         margin-top: 10px;
         gap: 20px;
+        position: relative;
+        height: 80px; /* espacio fijo para los botones */
     }
 
     button {
@@ -69,20 +71,24 @@
 
 <script>
 const noBtn = document.getElementById("noBtn");
-const padding = 10; // margen de seguridad
+const yesBtn = document.getElementById("yesBtn");
 let moved = false;
 
-// Función para mover No dentro de la pantalla visible
+// Guardar posición inicial de No
+let initialRect = noBtn.getBoundingClientRect();
+
+// Definir rango seguro para No (evitar bordes)
+const range = {
+    xMin: initialRect.left - 50,  // 50px a la izquierda
+    xMax: initialRect.left + 50,  // 50px a la derecha
+    yMin: initialRect.top - 20,   // 20px arriba
+    yMax: initialRect.top + 20    // 20px abajo
+};
+
+// Función para mover No dentro del rango seguro
 function moveNoButton() {
-    const winWidth = window.innerWidth;
-    const winHeight = window.innerHeight;
-
-    // Limitar para que nunca salga del rango visible
-    const maxX = Math.max(padding, winWidth - noBtn.offsetWidth - padding);
-    const maxY = Math.max(padding, winHeight - noBtn.offsetHeight - padding);
-
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
+    const x = Math.random() * (range.xMax - range.xMin) + range.xMin;
+    const y = Math.random() * (range.yMax - range.yMin) + range.yMin;
 
     noBtn.style.position = "absolute";
     noBtn.style.left = `${x}px`;
@@ -91,7 +97,7 @@ function moveNoButton() {
     moved = true;
 }
 
-// Se mueve si el cursor se acerca (PC)
+// Mover No si el cursor se acerca (PC)
 document.addEventListener("mousemove", function(e) {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
@@ -101,7 +107,7 @@ document.addEventListener("mousemove", function(e) {
     if (distance < 150) moveNoButton();
 });
 
-// Se mueve si alguien toca cerca (móvil)
+// Mover No si toca cerca (móvil)
 document.addEventListener("touchstart", function(e) {
     const touch = e.touches[0];
     const rect = noBtn.getBoundingClientRect();
@@ -112,29 +118,43 @@ document.addEventListener("touchstart", function(e) {
     if (distance < 150) moveNoButton();
 });
 
-// Se mueve si alguien pulsa No
+// Mover No si alguien pulsa/toca
 noBtn.addEventListener("click", moveNoButton);
 
 // Yes button
-document.getElementById("yesBtn").onclick = function() {
+yesBtn.addEventListener("click", function() {
     document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
-};
+});
 
-// Inicializar No alineado con Yes al cargar
+// Inicializar No alineado con Yes
 window.onload = function() {
     if (!moved) {
         noBtn.style.position = "relative";
         noBtn.style.left = "0px";
         noBtn.style.top = "0px";
+
+        // actualizar rango seguro según posición inicial
+        initialRect = noBtn.getBoundingClientRect();
+        range.xMin = initialRect.left - 50;
+        range.xMax = initialRect.left + 50;
+        range.yMin = initialRect.top - 20;
+        range.yMax = initialRect.top + 20;
     }
 };
 
-// Ajustar No si se cambia tamaño
+// Ajustar rango si se cambia tamaño
 window.onresize = function() {
     if (!moved) {
         noBtn.style.position = "relative";
         noBtn.style.left = "0px";
         noBtn.style.top = "0px";
+
+        // actualizar rango seguro
+        initialRect = noBtn.getBoundingClientRect();
+        range.xMin = initialRect.left - 50;
+        range.xMax = initialRect.left + 50;
+        range.yMin = initialRect.top - 20;
+        range.yMax = initialRect.top + 20;
     }
 };
 </script>
