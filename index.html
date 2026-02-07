@@ -4,61 +4,60 @@
 <meta charset="UTF-8">
 <title>Valentine</title>
 <style>
-    body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: white;
-        font-family: Arial, sans-serif;
-        overflow: hidden;
-        position: relative;
-    }
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    font-family: Arial, sans-serif;
+}
 
-    .heart {
-        font-size: 500px;
-        color: red;
-        animation: beat 1s infinite;
-    }
+/* Corazón */
+.heart {
+    font-size: 500px;
+    color: red;
+    animation: beat 1s infinite;
+}
 
-    @keyframes beat {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
+@keyframes beat {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
 
-    h1 {
-        font-size: 36px;
-        margin: 20px 0;
-        text-align: center;
-    }
+h1 {
+    margin: 20px 0;
+    text-align: center;
+}
 
-    .buttons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 10px;
-        gap: 20px;
-        position: relative;
-        height: 80px; /* espacio fijo */
-    }
+/* Botones centrados */
+.buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
 
-    button {
-        padding: 20px 50px;
-        font-size: 26px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: transform 0.2s;
-        z-index: 10000;
-        position: relative;
-    }
+button {
+    padding: 18px 45px;
+    font-size: 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
 
-    #yesBtn { background: red; color: white; }
-    #noBtn { background: gray; color: white; }
+#yesBtn {
+    background: red;
+    color: white;
+}
 
-    button:hover { transform: scale(1.1); }
+#noBtn {
+    background: gray;
+    color: white;
+}
 </style>
 </head>
 <body>
@@ -66,71 +65,21 @@
 <div class="heart">❤️</div>
 <h1>Will you be my girlfriend?</h1>
 
-<div class="buttons" id="buttonContainer">
+<div class="buttons">
     <button id="yesBtn">Yes</button>
     <button id="noBtn">No</button>
 </div>
 
 <script>
-const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
-const container = document.getElementById("buttonContainer");
 
-// Rango de movimiento centrado alrededor del No
-const moveRange = { x: 40, y: 20 };
-let centerPos = { x: 0, y: 0 };
-
-// Inicializar posición central del No
-function setCenter() {
-    const rect = noBtn.getBoundingClientRect();
-    centerPos.x = rect.left;
-    centerPos.y = rect.top;
-
-    noBtn.style.position = "absolute";
-    noBtn.style.left = `${centerPos.x}px`;
-    noBtn.style.top = `${centerPos.y}px`;
-}
-window.onload = setCenter;
-window.onresize = setCenter;
-
-// Función para mover No dentro del rango centrado y seguro
-function moveNoButton() {
-    let x = centerPos.x + (Math.random() * moveRange.x * 2 - moveRange.x);
-    let y = centerPos.y + (Math.random() * moveRange.y * 2 - moveRange.y);
-
-    // Asegurar que no salga del viewport
-    x = Math.min(Math.max(x, 10), window.innerWidth - noBtn.offsetWidth - 10);
-    y = Math.min(Math.max(y, 10), window.innerHeight - noBtn.offsetHeight - 10);
-
-    noBtn.style.left = `${x}px`;
-    noBtn.style.top = `${y}px`;
-}
-
-// Movimiento al acercarse (PC)
-document.addEventListener("mousemove", function(e) {
-    const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(
-        e.clientX - (rect.left + rect.width / 2),
-        e.clientY - (rect.top + rect.height / 2)
-    );
-    if (distance < 150) moveNoButton();
-});
-
-// Movimiento al tocar/click (móvil y PC)
-document.addEventListener("touchstart", function(e) {
-    const touch = e.touches[0];
-    const rect = noBtn.getBoundingClientRect();
-    const distance = Math.hypot(
-        touch.clientX - (rect.left + rect.width / 2),
-        touch.clientY - (rect.top + rect.height / 2)
-    );
-    if (distance < 150) moveNoButton();
-});
-noBtn.addEventListener("click", moveNoButton);
-
-// Yes button
-yesBtn.addEventListener("click", function() {
-    document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
+// Al hacer click en Yes, cambiar el contenido de la página
+yesBtn.addEventListener("click", () => {
+    document.body.innerHTML = `
+        <h1 style="font-size:36px; text-align:center; color:red;">
+        I knew you would say yes, my girl. I love you so much and I hope we stay together for a long time ❤️
+        </h1>
+    `;
 });
 </script>
 
