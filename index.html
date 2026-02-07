@@ -36,9 +36,9 @@
 
     .buttons {
         display: flex;
-        justify-content: center;
-        gap: 50px;
-        margin-top: 20px;
+        justify-content: center; /* centrados horizontalmente */
+        margin-top: 10px; /* justo debajo de la pregunta */
+        gap: 20px; /* espacio pequeño entre botones */
         position: relative;
     }
 
@@ -48,12 +48,12 @@
         border: none;
         border-radius: 12px;
         cursor: pointer;
-        transition: transform 0.2s;
         z-index: 1000;
+        transition: transform 0.2s;
     }
 
     #yesBtn { background: red; color: white; }
-    #noBtn { background: gray; color: white; }
+    #noBtn { background: gray; color: white; position: relative; }
 
     button:hover { transform: scale(1.1); }
 </style>
@@ -71,7 +71,7 @@
 <script>
 const noBtn = document.getElementById("noBtn");
 const padding = 10;
-let moved = false;
+let moved = false; // indica si el No ya pasó a absolute
 
 // Función para mover No dentro de la ventana
 function moveNoButton() {
@@ -85,7 +85,7 @@ function moveNoButton() {
     moved = true;
 }
 
-// Movimiento al acercarse el cursor (PC)
+// Detecta acercamiento del cursor (PC)
 document.addEventListener("mousemove", function(e) {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
@@ -95,10 +95,7 @@ document.addEventListener("mousemove", function(e) {
     if (distance < 150) moveNoButton();
 });
 
-// Movimiento si alguien pulsa No
-noBtn.addEventListener("click", moveNoButton);
-
-// Detectar toque cercano en móviles
+// Detecta toque cercano (móvil)
 document.addEventListener("touchstart", function(e) {
     const touch = e.touches[0];
     const rect = noBtn.getBoundingClientRect();
@@ -109,12 +106,15 @@ document.addEventListener("touchstart", function(e) {
     if (distance < 150) moveNoButton();
 });
 
+// Si alguien pulsa/toca No, se mueve
+noBtn.addEventListener("click", moveNoButton);
+
 // Yes button
 document.getElementById("yesBtn").onclick = function() {
     document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
 };
 
-// Inicializar posición de No alineado al cargar
+// Inicializar No alineado con Yes al cargar
 window.onload = function() {
     if (!moved) {
         noBtn.style.position = "relative";
@@ -123,7 +123,7 @@ window.onload = function() {
     }
 };
 
-// Ajustar al cambiar tamaño
+// Ajustar No si se cambia tamaño
 window.onresize = function() {
     if (!moved) {
         noBtn.style.position = "relative";
