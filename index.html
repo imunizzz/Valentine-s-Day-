@@ -36,10 +36,9 @@
 
     .buttons {
         display: flex;
-        justify-content: center; /* centrados horizontalmente */
-        margin-top: 10px; /* justo debajo de la pregunta */
-        gap: 20px; /* espacio pequeño entre botones */
-        position: relative;
+        justify-content: center;
+        margin-top: 10px;
+        gap: 20px;
     }
 
     button {
@@ -48,8 +47,8 @@
         border: none;
         border-radius: 12px;
         cursor: pointer;
-        z-index: 1000;
         transition: transform 0.2s;
+        z-index: 1000;
     }
 
     #yesBtn { background: red; color: white; }
@@ -71,9 +70,9 @@
 <script>
 const noBtn = document.getElementById("noBtn");
 const padding = 10;
-let moved = false; // indica si el No ya pasó a absolute
+let moved = false;
 
-// Función para mover No dentro de la ventana
+// Función para mover No sin desaparecer
 function moveNoButton() {
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
@@ -82,10 +81,11 @@ function moveNoButton() {
     noBtn.style.position = "absolute";
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
+    noBtn.style.zIndex = 1000;
     moved = true;
 }
 
-// Detecta acercamiento del cursor (PC)
+// Se mueve si el cursor se acerca (PC)
 document.addEventListener("mousemove", function(e) {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
@@ -95,7 +95,7 @@ document.addEventListener("mousemove", function(e) {
     if (distance < 150) moveNoButton();
 });
 
-// Detecta toque cercano (móvil)
+// Se mueve si alguien toca cerca (móvil)
 document.addEventListener("touchstart", function(e) {
     const touch = e.touches[0];
     const rect = noBtn.getBoundingClientRect();
@@ -106,7 +106,7 @@ document.addEventListener("touchstart", function(e) {
     if (distance < 150) moveNoButton();
 });
 
-// Si alguien pulsa/toca No, se mueve
+// Se mueve si alguien pulsa No
 noBtn.addEventListener("click", moveNoButton);
 
 // Yes button
