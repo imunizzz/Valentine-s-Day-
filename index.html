@@ -69,18 +69,24 @@
 
 <script>
 const noBtn = document.getElementById("noBtn");
-const padding = 10;
+const padding = 10; // margen de seguridad
 let moved = false;
 
-// Función para mover No sin desaparecer
+// Función para mover No dentro de la pantalla visible
 function moveNoButton() {
-    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+    const winWidth = window.innerWidth;
+    const winHeight = window.innerHeight;
+
+    // Limitar para que nunca salga del rango visible
+    const maxX = Math.max(padding, winWidth - noBtn.offsetWidth - padding);
+    const maxY = Math.max(padding, winHeight - noBtn.offsetHeight - padding);
+
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
+
     noBtn.style.position = "absolute";
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+    noBtn.style.left = `${x}px`;
+    noBtn.style.top = `${y}px`;
     noBtn.style.zIndex = 1000;
     moved = true;
 }
