@@ -12,7 +12,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: white; /* Fondo blanco */
+        background: white;
         color: black;
         font-family: Arial, sans-serif;
         overflow: hidden;
@@ -27,20 +27,22 @@
 
     @keyframes beat {
         0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); } /* Latido proporcional al tamaño */
+        50% { transform: scale(1.1); }
     }
 
     h1 {
         font-size: 36px;
         margin: 20px 0;
+        text-align: center;
     }
 
     .buttons {
         width: 100%;
         display: flex;
-        justify-content: space-around; /* Yes y No en extremos */
+        justify-content: space-around; /* Yes y No a extremos */
         margin-top: 20px;
         position: relative;
+        height: 80px; /* espacio reservado para los botones */
     }
 
     button {
@@ -89,15 +91,21 @@ document.addEventListener("mousemove", function(e) {
         e.clientY - (rect.top + rect.height / 2)
     );
 
-    if (distance < 180) { // Se mueve antes de que el cursor llegue
-        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 300) + 300; // Evitar que suba sobre el corazón gigante
+    if (distance < 180) { // se mueve antes de que el cursor llegue
+        const padding = 20; // margen para no salirse de la pantalla
+        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+        const x = Math.random() * maxX;
+        const y = Math.random() * maxY;
+
         noBtn.style.position = "absolute";
         noBtn.style.left = x + "px";
         noBtn.style.top = y + "px";
     }
 });
 
+// Yes button
 document.getElementById("yesBtn").onclick = function() {
     document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
 };
