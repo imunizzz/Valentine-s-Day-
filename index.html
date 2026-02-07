@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Valentine</title>
-
 <style>
     body {
         margin: 0;
@@ -12,7 +11,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: white; /* Fondo blanco */
+        background: white;
         font-family: Arial, sans-serif;
         overflow: hidden;
         position: relative;
@@ -35,38 +34,39 @@
         text-align: center;
     }
 
-    .buttons {
-        width: 100%;
-        display: flex;
-        justify-content: space-around; /* Yes y No a extremos */
-        margin-top: 20px;
-        position: relative;
-        height: 80px;
-    }
-
-    button {
+    #yesBtn, #noBtn {
         padding: 20px 50px;
         font-size: 26px;
         border: none;
         border-radius: 12px;
         cursor: pointer;
         transition: transform 0.2s;
-        position: relative;
         z-index: 1000;
     }
 
     #yesBtn {
         background: red;
         color: white;
+        margin-right: 50px;
     }
 
     #noBtn {
         background: gray;
         color: white;
+        position: absolute;
     }
 
-    button:hover {
+    #yesBtn:hover, #noBtn:hover {
         transform: scale(1.1);
+    }
+
+    .buttons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start; /* Yes a la izquierda */
+        margin-top: 20px;
+        position: relative;
+        height: 80px;
     }
 </style>
 </head>
@@ -78,51 +78,47 @@
 
 <div class="buttons">
     <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
 </div>
+<button id="noBtn">No</button> <!-- No fuera del contenedor -->
 
 <script>
 const noBtn = document.getElementById("noBtn");
-const padding = 20; // margen para que no salga de la pantalla
+const padding = 10;
 
-// Función para mover el botón No a una posición aleatoria dentro de la pantalla
+// Función para mover el botón No dentro de la pantalla
 function moveNoButton() {
     const maxX = window.innerWidth - noBtn.offsetWidth - padding;
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
-    noBtn.style.position = "absolute";
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 }
 
-// Movimiento dinámico al acercarse el cursor
+// Se mueve al acercarse el cursor
 document.addEventListener("mousemove", function(e) {
     const rect = noBtn.getBoundingClientRect();
     const distance = Math.hypot(
         e.clientX - (rect.left + rect.width / 2),
         e.clientY - (rect.top + rect.height / 2)
     );
-
-    if (distance < 180) { // se mueve antes de que el cursor llegue
-        moveNoButton();
-    }
+    if (distance < 180) moveNoButton();
 });
 
-// Movimiento constante cada 2 segundos para que nunca desaparezca
-setInterval(moveNoButton, 2000);
-
-// Si alguien logra pulsar No, se mueve inmediatamente
+// Si alguien pulsa No, se mueve inmediatamente
 noBtn.onclick = moveNoButton;
+
+// Movimiento automático rápido cada 0.5 segundos
+setInterval(moveNoButton, 500);
 
 // Yes button
 document.getElementById("yesBtn").onclick = function() {
     document.body.innerHTML = "<h1 style='color:red; font-size:48px; text-align:center;'>❤️ I knew it! ❤️</h1>";
 };
 
-// Inicializar posición del botón No al cargar la página
+// Inicializar posición al cargar y al cambiar tamaño
 window.onload = moveNoButton;
-window.onresize = moveNoButton; // ajusta si cambia tamaño de pantalla
+window.onresize = moveNoButton;
 </script>
 
 </body>
